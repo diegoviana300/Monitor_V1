@@ -11,7 +11,8 @@ TOKEN = os.getenv("TOKEN")
 CHAT_ID = os.getenv("CHAT_ID")
 
 if not TOKEN or not CHAT_ID:
-    raise ValueError("ERRO: Variáveis de ambiente TOKEN e CHAT_ID são obrigatórias.")
+    # Mensagem de erro específica para o ambiente do GitHub Actions
+    raise ValueError("ERRO: Secrets TOKEN e CHAT_ID não foram encontrados. Verifique as configurações do repositório.")
 
 bot = Bot(token=TOKEN)
 
