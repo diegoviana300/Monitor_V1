@@ -1,63 +1,30 @@
 name: Executar Monitor de Preços V1
 
-
-
 on:
-
-  schedule:
-
-    - cron: "*/30 * * * *"  # A cada 30 minutos
-
-  workflow_dispatch:        # Permite rodar manualmente
-
-
+  schedule:
+    - cron: "*/30 * * * *"  # A cada 30 minutos
+  workflow_dispatch:          # Permite rodar manualmente
 
 jobs:
+  run-monitor:
+    runs-on: ubuntu-latest
 
-  run-monitor:
+    steps:
+      - name: Baixar código do repositório
+        uses: actions/checkout@v3
 
-    runs-on: ubuntu-latest
+      - name: Configurar Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.11"
 
+      - name: Instalar dependências
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
 
-
-    steps:
-
-      - name: Baixar código do repositório
-
-        uses: actions/checkout@v3
-
-
-
-      - name: Configurar Python
-
-        uses: actions/setup-python@v4
-
-        with:
-
-          python-version: "3.11"   # 🔹 Alterado para versão mais recente
-
-
-
-      - name: Instalar dependências
-
-        run: |
-
-          python -m pip install --upgrade pip
-
-          pip install -r requirements.txt
-
-
-
-      - name: Rodar monitor de preços
-
-        env:
-
-          TOKEN: ${{ secrets.TOKEN }}
-
-          CHAT_ID: ${{ secrets.CHAT_ID }}
-
-          
-
-        run: |
-
-          python -u monitor_ml.py
+      - name: Rodar monitor de preços
+        env:
+          TOKEN: ${{ secrets.TOKEN }}
+          CHAT_ID: ${{ secrets.CHAT_ID }}
+        run: python -u monitor_ml.py
